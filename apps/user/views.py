@@ -49,7 +49,7 @@ def account_create_view(request):
             try:
                 user = _handle_create_account(request.POST)
                 login(request, user)
-                return redirect('resume')
+                return redirect('resumes')
             except FormInputError, e:
                 template_dict['error'] = str(e)
     else:

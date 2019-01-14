@@ -1,0 +1,47 @@
+{% extends "base_logged_in.html" %}
+
+{% comment %}
+Template for viewing a list of the users resumes.
+{% endcomment %}
+
+{% block styles %}
+    {{ block.super }}
+    <style>
+        div.resumes-container {
+            margin: 24px auto 0;
+            padding-bottom: 24px;
+        }
+
+        span.resume-title {
+            font-size: 28px;
+            padding-left: 10px;
+        }
+
+        span.resume-items {
+            font-size: 22px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid content-section resumes-container">
+        <div class="header-container">
+            <h1>Resumes</h1>
+        </div>
+
+        {% for resume in resumes %}
+            <section class="resume">
+                <div class="row">
+                    <div class="col-md-4"><span class="resume-title">{{ resume.title }}</span></div>
+                    <div class="col-md-4"><span class="resume-items">{{ resume.resume_items.count }} Item(s)</span></div>
+                    <div class="col-md-4">
+                        <a class="btn btn-primary" href={% url 'resume' resume.id %}>View</a>
+                        <a class="btn btn-primary" href={% url 'resume-edit' resume.id %}>Edit</a>
+                    </div>
+                </div>
+            </section>
+        {% endfor %}
+
+        <a class="btn btn-success" href={% url 'resume-create' %}>Create new resume</a>
+    </div>
+{% endblock %}

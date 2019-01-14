@@ -22,3 +22,9 @@ class ResumeItem(models.Model):
                                           self.title,
                                           self.company,
                                           self.start_date.isoformat())
+
+
+class Resume(models.Model):
+    user = models.ForeignKey('auth.User')
+    resume_items = models.ManyToManyField(ResumeItem)
+    title = models.CharField(max_length=127)

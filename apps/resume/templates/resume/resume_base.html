@@ -1,0 +1,73 @@
+{% extends "base_logged_in.html" %}
+
+{% comment %}
+Base form template for creating and editing resumes.
+{% endcomment %}
+
+{% block styles %}
+    {{ block.super }}
+    <style>
+    div.resume-form-container {
+      margin-top: 24px;
+    }
+
+    #resumeItemsSelectHelp {
+        display: block;
+    }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid content-section resume-form-container">
+        <h1>{% block resume_header_text %}{% endblock %}</h1>
+
+        <form class="form-horizontal" action="" method="post">
+            {% csrf_token %}
+            <div class="row">
+                {{ form.title.errors }}
+                <div class="form-group">
+                    <label for="inputTitle" class="col-sm-2 control-label">Title</label>
+                    <div class="col-sm-8">
+                        <input type="text" name="title" id="inputTitle"
+                               required maxlength="127"
+                               class="form-control" aria-label="Title"
+                               {% if form.title.value %}value="{{ form.title.value }}"{% endif %}>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                {{ form.resume_items.errors }}
+                <div class="form-group">
+                    <label for="inputResumeItems" class="col-sm-2 control-label">Resume Items</label>
+                    <div class="col-sm-8">
+                        {{ form.resume_items }}
+
+                        <small id="resumeItemsSelectHelp" class="form-text text-muted">
+                            {{ form.resume_items.help_text }}
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    {% if message %}
+                        <p class="text-success">{{ message }}</p>
+                    {% endif %}
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-1 col-sm-11 submit-col">
+                            <button type="submit" class="btn btn-primary">
+                                {% block resume_submit_button_text %}{% endblock %}
+                            </button>
+                            <a class="btn btn-default" href="/resumes/">Back</a>
+
+                            {% block resume_additional_buttons %}{% endblock %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

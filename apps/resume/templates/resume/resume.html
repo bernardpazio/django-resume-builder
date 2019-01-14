@@ -5,70 +5,74 @@ Template for viewing a resume.
 {% endcomment %}
 
 {% block styles %}
-  {{ block.super }}
+    {{ block.super }}
 
-  <style>
-    div.resume-container {
-      margin: 24px auto 0;
-      max-width: 800px;
-    }
+    <style>
+        div.resume-container, div.resume-title {
+            margin: 24px auto 0;
+            max-width: 800px;
+        }
 
-    div.header-center-container {
-      text-align: center;
+        div.header-center-container {
+            text-align: center;
+            margin-top: 12px;
+        }
 
-      margin-top: 12px;
-    }
+        div.header-container {
+            text-align: left;
+            display: inline-block;
+        }
 
-    div.header-container {
-      text-align: left;
+        div.header-container > h3 {
+            margin-top: 0;
+            color: #666666;
+        }
 
-      display: inline-block;
-    }
+        section.resume-item {
+            margin-top: 36px;
 
-    div.header-container > h3 {
-      margin-top: 0;
+            position: relative;
+        }
 
-      color: #666666;
-    }
+        section.resume-item > a.btn {
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
 
-    section.resume-item {
-      margin-top: 36px;
-
-      position: relative;
-    }
-
-    section.resume-item > a.btn {
-      position: absolute;
-      right: 0;
-      top: 0;
-    }
-
-    div.resume-container > a.btn {
-      margin-top: 24px;
-      margin-bottom: 24px;
-    }
-  </style>
+        div.resume-container > a.btn {
+            margin-top: 24px;
+            margin-bottom: 24px;
+        }
+    </style>
 {% endblock %}
 
 {% block content %}
-  <div class="container content-section resume-container">
-    <div class="header-center-container">
-      <div class="header-container">
-        <h1>{{ request.user.first_name }} {{ request.user.last_name }}</h1>
-        <h3>{{ request.user.email }}</h3>
-      </div>
+
+    <div class="container content-section resume-title">
+        <h1>Resume: {{ resume.title }}</h1>
     </div>
 
-    {% for resume_item in resume_items %}
-      <section class="resume-item">
-        <h3>{{ resume_item.title }}</h3>
-        <h4>{{ resume_item.company }}</h4>
-        <h4>{{ resume_item.start_date | date:"M Y"}} - {% if resume_item.end_date %}{{ resume_item.end_date | date:"M Y"}}{% else %}Present{% endif %}</h4>
-        {% if resume_item.description %}<p>{{ resume_item.description }}</p>{% endif %}
-        <a class="btn btn-primary" href="/resume/item/edit/{{ resume_item.id }}/">Edit</a>
-      </section>
-    {% endfor %}
+    <div class="container content-section resume-container">
+        <div class="header-center-container">
+            <div class="header-container">
+                <h1>{{ request.user.first_name }} {{ request.user.last_name }}</h1>
+                <h3>{{ request.user.email }}</h3>
+            </div>
+        </div>
 
-    <a class="btn btn-success" href="/resume/item/create/">Add New Item</a>
-  </div>
+        {% for resume_item in resume.resume_items.all %}
+            <section class="resume-item">
+                <h3>{{ resume_item.title }}</h3>
+                <h4>{{ resume_item.company }}</h4>
+                <h4>{{ resume_item.start_date | date:"M Y" }} -
+                    {% if resume_item.end_date %}{{ resume_item.end_date | date:"M Y" }}{% else %}
+                        Present{% endif %}</h4>
+                {% if resume_item.description %}<p>{{ resume_item.description }}</p>{% endif %}
+                <a class="btn btn-primary" href={% url 'resume-item-edit' resume.id resume_item.id  %}>Edit</a>
+            </section>
+        {% endfor %}
+
+        <a class="btn btn-success" href="{% url 'resume-item-create' resume.id %}">Add New Item</a>
+    </div>
 {% endblock %}
